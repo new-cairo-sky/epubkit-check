@@ -32,5 +32,5 @@ or
     'msg': ''    // error or warning message, e.g. 'Fragment identifier is not defined.'
     }
   ]
-}
+}npm
 ```
