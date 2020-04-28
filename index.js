@@ -56,6 +56,7 @@ async function processExecData(dir_path, command, args) {
  * @param {object} userOptions - options object in the shape of: 
   { profile: string,
     mode: string
+    version: string
     save: bool
     out: string - path to output file or '-' for console. leave undefined for none. 
     xmp: string  - path to output file or '-' for console. leave undefined for none. 
@@ -77,6 +78,7 @@ async function epubkitCheck(dirPath, userOptions) {
   const defaultOptions = {
     profile: "default",
     mode: undefined,
+    version: undefined,
     save: undefined,
     out: undefined,
     xmp: undefined,
@@ -97,6 +99,8 @@ async function epubkitCheck(dirPath, userOptions) {
       return [];
     } else if (value === true) {
       return [`--${key}`];
+    } else if (key === "version") {
+      return [`-v`, `${value}`];
     } else {
       return [`--${key}`, `${value}`];
     }
