@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-import fs from "fs";
-const path = require("path");
-const spawnAsync = require("@expo/spawn-async");
-const epubcheck_path = path.resolve(__dirname, "lib/epubcheck");
+import { stat } from "fs";
+import { resolve } from "path";
+import spawnAsync from "@expo/spawn-async";
+const epubcheck_path = resolve(__dirname, "lib/epubcheck");
 
 function linesToMessages(dir_path, lines) {
   return lines
@@ -52,7 +52,7 @@ async function processExecData(dir_path, command, args) {
 /**
  * Check an ePub using epubcheck java application 
  * see: https://github.com/w3c/epubcheck/wiki/Running
- * @param {string} dirPath - path to epub
+ * @param {string} epubPath - path to epub
  * @param {object} userOptions - options object in the shape of: 
   { profile: string,
     mode: string
@@ -70,14 +70,21 @@ async function processExecData(dir_path, command, args) {
     customMessages: string - path to file,
   }
  */
-async function epubkitCheck(dirPath, userOptions) {
+async function epubkitCheck(epubPath, userOptions) {
   const jarPath = userOptions?.jarPath
     ? userOptions.jarPath
     : `${epubcheck_path}/epubcheck.jar`;
 
+  let isDir = false;
+  try {
+    isDir = await stat(epubPath).isDirectory();
+  } catch (err) {
+    // not a dir;
+  }
+
   const defaultOptions = {
     profile: "default",
-    mode: undefined,
+    mode: isDir ? "exp" : undefined,
     version: undefined,
     save: undefined,
     out: undefined,
@@ -106,9 +113,9 @@ async function epubkitCheck(dirPath, userOptions) {
     }
   }, []);
 
-  const args = ["-jar", jarPath, dirPath].concat(optionArgs);
+  const args = ["-jar", jarPath, epubPath].concat(optionArgs);
 
-  return processExecData(dirPath, "java", args);
+  return processExecData(epubPath, "java", args);
 }
 
-module.exports = epubkitCheck;
+export default epubkitCheck;
