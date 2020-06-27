@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { stat } from "fs";
+import fs from "fs";
 import { resolve } from "path";
 import spawnAsync from "@expo/spawn-async";
 const epubcheck_path = resolve(__dirname, "lib/epubcheck");
@@ -77,7 +77,7 @@ async function epubkitCheck(epubPath, userOptions) {
 
   let isDir = false;
   try {
-    isDir = await stat(epubPath).isDirectory();
+    isDir = await fs.stat(epubPath).isDirectory();
   } catch (err) {
     // not a dir;
   }
