@@ -1,8 +1,12 @@
 #!/usr/bin/env node
-import fs from "fs";
-import { resolve } from "path";
-import spawnAsync from "@expo/spawn-async";
-const epubcheck_path = resolve(__dirname, "lib/epubcheck");
+//import fs from "fs";
+//import { resolve } from "path";
+//import spawnAsync from "@expo/spawn-async";
+const fs = require("fs");
+const path = require("path");
+const spawnAsync = require("@expo/spawn-async");
+
+const epubcheck_path = path.resolve(__dirname, "lib/epubcheck");
 
 function linesToMessages(dir_path, lines) {
   return lines
